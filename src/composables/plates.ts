@@ -29,7 +29,7 @@ export default function usePlates() {
         return
       }
 
-      searchData.value = responseData.data
+      searchData.value = responseData
       loading.value = false
     }
     catch (err: any) {
