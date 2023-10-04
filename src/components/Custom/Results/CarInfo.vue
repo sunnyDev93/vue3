@@ -7,8 +7,15 @@ import useCarStore from "@/store/car";
 const carStore = useCarStore();
 
 const newCarData = computed(() => {
-  delete carStore.cartInfo["PCS_CONSTRUCTION_INTERVAL_START"];
-  delete carStore.cartInfo["PCS_CONSTRUCTION_INTERVAL_END"];
+  if (
+    carStore.cartInfo["PCS_CONSTRUCTION_INTERVAL_START"] &&
+    carStore.cartInfo["PCS_CONSTRUCTION_INTERVAL_END"]
+  ) {
+    delete carStore.cartInfo["PCS_CONSTRUCTION_INTERVAL_START"];
+    delete carStore.cartInfo["PCS_CONSTRUCTION_INTERVAL_END"];
+  } else {
+    delete carStore.cartInfo["CONSTRUCTION_YEAR"];
+  }
   return pickBy(carStore.cartInfo, (value: any) => value !== null);
 });
 </script>

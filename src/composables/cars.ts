@@ -57,6 +57,15 @@ export default function useCars() {
 
         return `${formattedStartYear} - ${formattedEndYear}`;
     }
+    const convertStartYear = (startYear : string) : string => {
+        const [startYearPart1, startYearPart2] = startYear.split('-');
+        return `${startYearPart2}.${startYearPart1}`;
+    }
+    const convertEndYear = (endYear : string) : string => {
+        const [endYearPart1, endYearPart2] = endYear.split('-');
+        return `${endYearPart2}.${endYearPart1}`;
+    }
+
     const getCarInfo = async (params : {
         car: string;
         selectedType: string
@@ -73,15 +82,33 @@ export default function useCars() {
 
             const responseData = await response.data
             if (responseData.data) {
-                carData.value = {
-                    ... responseData.data,
-                    PCS_CONSTRUCTION_YEAR: convertDateRange(responseData.data.PCS_CONSTRUCTION_INTERVAL_START, responseData.data.PCS_CONSTRUCTION_INTERVAL_END)
+                if (responseData.data.PCS_CONSTRUCTION_INTERVAL_START && responseData.data.PCS_CONSTRUCTION_INTERVAL_END) {
+                    carData.value = {
+                        ... responseData.data,
+                        PCS_CONSTRUCTION_YEAR: convertDateRange(responseData.data.PCS_CONSTRUCTION_INTERVAL_START, responseData.data.PCS_CONSTRUCTION_INTERVAL_END)
+                    }
+                    store.setCarInfo(carData.value)
+                    store.setCategories(responseData.tree)
+                    noDataFound.value = false
                 }
-                console.log(convertDateRange(responseData.data.PCS_CONSTRUCTION_INTERVAL_START, responseData.data.PCS_CONSTRUCTION_INTERVAL_END));
-
-                store.setCarInfo(carData.value)
-                store.setCategories(responseData.tree)
-                noDataFound.value = false
+                if (responseData.data.PCS_CONSTRUCTION_INTERVAL_START && ! responseData.data.PCS_CONSTRUCTION_INTERVAL_END) {
+                    carData.value = {
+                        ... responseData.data,
+                        PCS_CONSTRUCTION_INTERVAL_START: convertStartYear(responseData.data.PCS_CONSTRUCTION_INTERVAL_START)
+                    }
+                    store.setCarInfo(carData.value)
+                    store.setCategories(responseData.tree)
+                    noDataFound.value = false
+                }
+                if (! responseData.data.PCS_CONSTRUCTION_INTERVAL_START && responseData.data.PCS_CONSTRUCTION_INTERVAL_END) {
+                    carData.value = {
+                        ... responseData.data,
+                        PCS_CONSTRUCTION_INTERVAL_END: convertEndYear(responseData.data.PCS_CONSTRUCTION_INTERVAL_END)
+                    }
+                    store.setCarInfo(carData.value)
+                    store.setCategories(responseData.tree)
+                    noDataFound.value = false
+                }
             } else {
                 noDataFound.value = true
             } carDataLoading.value = false
