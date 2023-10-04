@@ -101,6 +101,13 @@ const handleShowCarInfo = () => {
   show.value = !show.value
   showType.value = 'car-info'
 }
+
+const truncateText = (params: string): string => {
+  const maxLength = 20
+  if (params.length > maxLength)
+    return params.substring(0, maxLength) + "..."
+  else return params
+}
 </script>
 
 <template>
@@ -136,7 +143,7 @@ const handleShowCarInfo = () => {
             class="hover:bg-[#a9bdf1]"
             @click="handleShowCarInfo"
           >
-            {{ carStore.cartInfo.TYPEL }}
+            {{ truncateText(carStore.cartInfo.TYPEL) }}
           </VBtn>
         </div>
         <div class="w-full md:w-1/2 flex items-center justify-center px-10">
