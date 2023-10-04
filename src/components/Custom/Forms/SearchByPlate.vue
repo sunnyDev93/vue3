@@ -97,10 +97,7 @@ const handleRedirect = () => {
         </div>
       </div>
 
-      <div
-        v-if="plateType === 'TU'"
-        class="w-full md:w-1/6"
-      >
+      <div class="w-full md:w-1/6">
         <div class="flex flex-wrap">
           <ElInput
             v-model="plate"
