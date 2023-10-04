@@ -27,6 +27,7 @@ const handleRedirect = (treeID: string, treeName: string) => {
   setTimeout(() => {
     router.push({ name: 'Product List', params: { categoryId: treeID, groupName: treeName, carId: props.carId } })
   }, 100)
+  loading.value = false
 }
 
 const handlePrimaryCategoryClick = (values: ICategory[]) => {
