@@ -105,7 +105,7 @@ const handleShowCarInfo = () => {
 const truncateText = (params: string): string => {
   const maxLength = 20
   if (params.length > maxLength)
-    return params.substring(0, maxLength) + "..."
+    return `${params.substring(0, maxLength)}...`
   else return params
 }
 </script>
