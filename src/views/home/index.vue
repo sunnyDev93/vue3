@@ -1,38 +1,35 @@
 <!-- eslint-disable @typescript-eslint/no-unused-vars -->
 <script setup lang="ts">
-import type { Ref } from 'vue'
-import { ref } from 'vue'
-import HomeHeader from '../../components/Custom/Headers/HomeHeader.vue'
-import HomeSeacrh from './HomeSearch.vue'
-import BrandSearch from './BrandSearch.vue'
+import type { Ref } from "vue";
+import { ref } from "vue";
+import HomeHeader from "../../components/Custom/Headers/HomeHeader.vue";
+import HomeSeacrh from "./HomeSearch.vue";
+import BrandSearch from "./BrandSearch.vue";
 
-const isPersonal: Ref<boolean> = ref(true)
-const isCommercial: Ref<boolean> = ref(true)
+const isPersonal: Ref<boolean> = ref(true);
+const isCommercial: Ref<boolean> = ref(true);
 
-const smartSearch: Ref<string> = ref('')
-const searchCategoriesVisible: Ref<boolean> = ref(false)
+const smartSearch: Ref<string> = ref("");
+const searchCategoriesVisible: Ref<boolean> = ref(false);
 
 const hanldeShowSeacrhCategories = (): void => {
-  searchCategoriesVisible.value = !searchCategoriesVisible.value
-}
+  searchCategoriesVisible.value = !searchCategoriesVisible.value;
+};
 
 const handleSaerchCategoryInputFocus = (): void => {
-  searchCategoriesVisible.value = false
-}
+  searchCategoriesVisible.value = false;
+};
 
 const handleSamrtSeach = () => {
   /**
    * @todo update logic for smart search
    */
-}
+};
 </script>
 
 <template>
   <div class="main">
-    <div
-      class="layout"
-      @click.self="handleSaerchCategoryInputFocus"
-    >
+    <div class="layout" @click.self="handleSaerchCategoryInputFocus">
       <div>
         <HomeHeader
           :search-categories-visible="searchCategoriesVisible"
@@ -58,7 +55,7 @@ const handleSamrtSeach = () => {
                   type="text"
                   class="el-input mx-1 text-[#000]"
                   placeholder="Start typing..."
-                >
+                />
               </div>
             </div>
             <div class="search-tabs">
@@ -82,8 +79,8 @@ const handleSamrtSeach = () => {
   gap: 20px;
 }
 .home-btn {
-    padding-left: 10px;
-    padding-top: 10px;
+  padding-left: 10px;
+  padding-top: 10px;
 }
 .btn {
   color: white;
