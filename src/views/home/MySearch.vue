@@ -23,7 +23,10 @@ const loading: Ref<boolean> = ref(false)
 const selectedBrand: Ref<string> = ref('')
 
 const handleRedirect = (treeID: string, treeName: string) => {
-  router.push({ name: 'Product List', params: { categoryId: treeID, groupName: treeName, carId: props.carId } })
+  loading.value = true
+  setTimeout(() => {
+    router.push({ name: 'Product List', params: { categoryId: treeID, groupName: treeName, carId: props.carId } })
+  }, 100)
 }
 
 const handlePrimaryCategoryClick = (values: ICategory[]) => {
@@ -104,7 +107,10 @@ watch(() => brandStore.brands, () => {
 </script>
 
 <template>
-  <div>
+  <div
+    v-loading.fullscreen.lock="loading"
+    class=""
+  >
     <div class="w-full flex gap-4">
       <div class="w-1/4 space-y-4">
         <div class="bg-white rounded-md px-4 py-2">

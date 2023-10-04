@@ -6,8 +6,10 @@ import useCarStore from '@/store/car'
 const props = defineProps(['id'])
 const carStore = useCarStore()
 const router = useRouter()
+const isLoading: Ref<boolean> = ref(false)
 
 const handleBackwardNavigation = () => {
+  isLoading.value = true
   if (carStore.filterLevel > 1) {
     carStore.filterLevel--
     carStore.removeFilterTitle()
@@ -17,7 +19,10 @@ const handleBackwardNavigation = () => {
 </script>
 
 <template>
-  <div class="bg-[#f1f1fc] space-y-4">
+  <div
+    v-loading.fullscreen.lock="isLoading"
+    class="bg-[#f1f1fc] space-y-4"
+  >
     <div>
       <VBtn
         prepend-icon="mdi-arrow-left"
@@ -29,7 +34,7 @@ const handleBackwardNavigation = () => {
       </VBtn>
     </div>
     <div>
-      <MySearch :car-id="props.id"/>
+      <MySearch :car-id="props.id" />
     </div>
   </div>
 </template>

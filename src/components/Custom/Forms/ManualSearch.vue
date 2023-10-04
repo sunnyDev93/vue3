@@ -55,7 +55,10 @@ const ccCapacity: Ref<string> = ref('')
 const loading: Ref<boolean> = ref(false)
 
 const handleRedirect = () => {
-  router.push({ name: 'Categories', params: { id: car.value, targetType: selectedType.value } })
+  loading.value = true
+  setTimeout(() => {
+    router.push({ name: 'Categories', params: { id: car.value, targetType: selectedType.value } })
+  }, 100)
 }
 
 const handleTypeClick = (button: IButton) => {
@@ -198,7 +201,7 @@ watchEffect(() => {
           <ElOption
             v-for="item in models"
             :key="item.MS_ID"
-            :label="`${item.MS_NAME}    ${
+            :label="`${item.MS_NAME} ${
               item.MS_CI_FROM ? item.MS_CI_FROM.slice(0, 7).replace('-', '/') : ''
             }${
               item.MS_CI_TO ? ` - ${item.MS_CI_TO.slice(0, 7).replace('-', '/')}` : ''}`"
