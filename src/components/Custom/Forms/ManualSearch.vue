@@ -55,7 +55,10 @@ const ccCapacity: Ref<string> = ref('')
 const loading: Ref<boolean> = ref(false)
 
 const handleRedirect = () => {
-  router.push({ name: 'Categories', params: { id: car.value, targetType: selectedType.value } })
+  loading.value = true
+  setTimeout(() => {
+    router.push({ name: 'Categories', params: { id: car.value, targetType: selectedType.value } })
+  }, 100)
 }
 
 const handleTypeClick = (button: IButton) => {
@@ -326,7 +329,6 @@ watchEffect(() => {
           color="#2d4aae"
           append-icon="mdi-arrow-right"
           class="text-white"
-          :loading="carDataLoading"
           @click="handleRedirect"
         >
           Go to categories
