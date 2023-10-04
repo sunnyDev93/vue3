@@ -198,7 +198,7 @@ watchEffect(() => {
           <ElOption
             v-for="item in models"
             :key="item.MS_ID"
-            :label="`${item.MS_NAME}    ${
+            :label="`${item.MS_NAME} ${
               item.MS_CI_FROM ? item.MS_CI_FROM.slice(0, 7).replace('-', '/') : ''
             }${
               item.MS_CI_TO ? ` - ${item.MS_CI_TO.slice(0, 7).replace('-', '/')}` : ''}`"
@@ -326,6 +326,7 @@ watchEffect(() => {
           color="#2d4aae"
           append-icon="mdi-arrow-right"
           class="text-white"
+          :loading="carDataLoading"
           @click="handleRedirect"
         >
           Go to categories

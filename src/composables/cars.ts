@@ -52,7 +52,7 @@ export default function useCars() {
 
       const response = await axios.get(CAR_INFO, {
         params: {
-          car: params.car,
+          car: params.car || '',
           typeCar: params.selectedType,
         },
       })
