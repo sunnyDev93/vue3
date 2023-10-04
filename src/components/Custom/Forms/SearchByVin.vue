@@ -1,44 +1,51 @@
 <script setup lang="ts">
-import type { Ref } from 'vue'
-import { ref } from 'vue'
+import type { Ref } from "vue";
+import { ref } from "vue";
 
-import { isEmpty } from 'lodash'
-import CarInfo from '../Results/CarInfo.vue'
-import useVins from '@/composables/vins'
-import useCarStore from '@/store/car'
-import useCars from '@/composables/cars'
+import { isEmpty } from "lodash";
+import CarInfo from "../Results/CarInfo.vue";
+import useVins from "@/composables/vins";
+import useCarStore from "@/store/car";
+import useCars from "@/composables/cars";
 
-const router = useRouter()
-const store = useCarStore()
-const { carData, getCarInfo } = useCars()
+const router = useRouter();
+const store = useCarStore();
+const { carData, getCarInfo } = useCars();
 
-const { loading, error, searchData, noDataFound, getByVins } = useVins()
+const { loading, error, searchData, noDataFound, getByVins } = useVins();
 
-const vinInput: Ref<string> = ref('')
+const vinInput: Ref<string> = ref("");
 
 const hadleSearchByVin = async () => {
-  loading.value = true
-  if (vinInput.value === '') {
-    error.value = 'VIN number is required'
+  loading.value = true;
+  if (vinInput.value === "") {
+    error.value = "VIN number is required";
 
-    return
+    return;
   }
-  if (vinInput.value.length < 17) {
-    error.value = 'VIN number is 17 characters long'
+  // if (vinInput.value.length < 17) {
+  //   error.value = 'VIN number is 17 characters long'
 
-    return
-  }
+  //   return
+  // }
 
-  await getByVins(vinInput.value)
-}
+  await getByVins(vinInput.value);
+};
 
 const handleRedirect = async () => {
-  await searchData.value && router.push({ name: 'Categories', params: { id: searchData.value.carId, targetType: store.carType } })
-}
+  (await searchData.value) &&
+    router.push({
+      name: "Categories",
+      params: { id: searchData.value.carId, targetType: store.carType },
+    });
+};
 
 watch(searchData, async () => {
-  await getCarInfo({ car: searchData.value.carId, selectedType: store.carType })
-})
+  await getCarInfo({
+    car: searchData.value.carId,
+    selectedType: store.carType,
+  });
+});
 </script>
 
 <template>
@@ -53,40 +60,22 @@ watch(searchData, async () => {
             class="input-with-btn"
           />
         </div>
-        <p
-          v-if="error"
-          class="text-red-500 text-sm"
-        >
+        <p v-if="error" class="text-red-500 text-sm">
           {{ error }}
         </p>
       </div>
     </div>
     <div>
-      <ElButton
-        class="btn"
-        icon="search"
-        @click="hadleSearchByVin"
-      >
+      <ElButton class="btn" icon="search" @click="hadleSearchByVin">
         Search
       </ElButton>
     </div>
-    <div
-      v-if="loading"
-      class="flex justify-center"
-    >
-      <VProgressCircular
-        :size="35"
-        :width="6"
-        color="primary"
-        indeterminate
-      />
+    <div v-if="loading" class="flex justify-center">
+      <VProgressCircular :size="35" :width="6" color="primary" indeterminate />
     </div>
     <div v-if="!isEmpty(carData)">
-      <CarInfo :car-details="carData"/>
-      <div
-        v-if="$route.path === '/home'"
-        class="pt-5"
-      >
+      <CarInfo :car-details="carData" />
+      <div v-if="$route.path === '/home'" class="pt-5">
         <VBtn
           color="#2d4aae"
           append-icon="mdi-arrow-right"
@@ -105,17 +94,17 @@ watch(searchData, async () => {
 
 <style scoped>
 .vehicle-search {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 .el-input {
-    width: 100%;
+  width: 100%;
 }
 
 label {
-    padding: 5px 0px;
-    margin-bottom: 5px;
-    font-weight: normal;
+  padding: 5px 0px;
+  margin-bottom: 5px;
+  font-weight: normal;
 }
 </style>
