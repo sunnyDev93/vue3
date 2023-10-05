@@ -1,116 +1,158 @@
 <script setup lang="ts">
-import type { Ref } from 'vue'
-import { ref } from 'vue'
-import { uniqBy } from 'lodash'
-import { useRoute, useRouter } from 'vue-router'
-import CarOverview from '@/components/Custom/Results/CarOverview.vue'
-import useCarStore from '@/store/car'
-import useBrandStore from '@/store/brands'
-import useCars from '@/composables/cars'
-import type { ICategory } from '@/globalTypes'
+import type { Ref } from "vue";
+import { ref } from "vue";
+import { uniqBy } from "lodash";
+import { useRoute, useRouter } from "vue-router";
+import CarOverview from "@/components/Custom/Results/CarOverview.vue";
+import useCarStore from "@/store/car";
+import useBrandStore from "@/store/brands";
+import useCars from "@/composables/cars";
+import type { ICategory } from "@/globalTypes";
 
-const props = defineProps(['carId'])
-const carStore = useCarStore()
-const brandStore = useBrandStore()
-const { carDataLoading, getCarInfo } = useCars()
+const props = defineProps(["carId"]);
+const carStore = useCarStore();
+const brandStore = useBrandStore();
+const { carDataLoading, getCarInfo } = useCars();
 
-const router = useRouter()
-const route = useRoute()
+const router = useRouter();
+const route = useRoute();
 
-const filterTitle: Ref<string> = ref('Categories')
-const carCategoriesData: Ref<any> = ref(null)
-const loading: Ref<boolean> = ref(false)
-const selectedBrand: Ref<string> = ref('')
+const filterTitle: Ref<string> = ref("Categories");
+const carCategoriesData: Ref<any> = ref(null);
+const loading: Ref<boolean> = ref(false);
+const selectedBrand: Ref<string> = ref("");
 
 const handleRedirect = (treeID: string, treeName: string) => {
-  loading.value = true
+  loading.value = true;
+  console.log(props.carId);
+
   setTimeout(() => {
-    router.push({ name: 'Product List', params: { categoryId: treeID, groupName: treeName, carId: props.carId } })
-  }, 100)
-}
+    router.push({
+      name: "Product List",
+      params: { categoryId: treeID, groupName: treeName, carId: props.carId },
+    });
+  }, 100);
+};
+const routeItems: Ref<any[]> = ref([route.matched]);
+
+const cartCount: Ref<number> = ref(0);
+
+watchEffect(() => {
+  routeItems.value = route.matched;
+});
 
 const handlePrimaryCategoryClick = (values: ICategory[]) => {
-  carStore.setFilterTitles(values[0].ROOT_NODE_TEXT)
-  carStore.setFilteredCategories(uniqBy(values, 'NODE_1_TEXT'))
-  carStore.setAllCategories(values)
-  carStore.setFilterLevel(2)
-  router.push({ name: 'Categories', params: { id: props.carId, treeName: values[0].ROOT_NODE_TEXT } })
-}
+  carStore.setFilterTitles(values[0].ROOT_NODE_TEXT);
+  carStore.setFilteredCategories(uniqBy(values, "NODE_1_TEXT"));
+  carStore.setAllCategories(values);
+  carStore.setFilterLevel(2);
+  router.push({
+    name: "Categories",
+    params: { id: props.carId, treeName: values[0].ROOT_NODE_TEXT },
+  });
+};
 
 const handleSecondLevelClick = (item: ICategory) => {
   if (item.STR_LEVEL === 2) {
-    handleRedirect(item.NODE_1_STR_ID, item.NODE_1_TEXT)
-  }
-  else {
-    carStore.setFilterTitles(item.NODE_1_TEXT)
+    handleRedirect(item.NODE_1_STR_ID, item.NODE_1_TEXT);
+  } else {
+    carStore.setFilterTitles(item.NODE_1_TEXT);
 
-    const categories = carStore.allCategories.filter((category: ICategory) => category.NODE_1_STR_ID === item.NODE_1_STR_ID)
+    const categories = carStore.allCategories.filter(
+      (category: ICategory) => category.NODE_1_STR_ID === item.NODE_1_STR_ID
+    );
 
-    carStore.setFilteredCategories(uniqBy(categories, 'NODE_2_TEXT'))
-    carStore.setFilterLevel(3)
-    router.push({ name: 'Categories', params: { id: props.carId, treeName: item.ROOT_NODE_TEXT, strid: item.NODE_1_STR_ID, strName: item.NODE_1_TEXT } })
+    carStore.setFilteredCategories(uniqBy(categories, "NODE_2_TEXT"));
+    carStore.setFilterLevel(3);
+    router.push({
+      name: "Categories",
+      params: {
+        id: props.carId,
+        treeName: item.ROOT_NODE_TEXT,
+        strid: item.NODE_1_STR_ID,
+        strName: item.NODE_1_TEXT,
+      },
+    });
   }
-}
+};
 
 const handleThirdLevelClick = (item: ICategory) => {
   if (item.STR_LEVEL === 3) {
-    item.NODE_2_STR_ID && item.NODE_2_TEXT && handleRedirect(item.NODE_2_STR_ID, item.NODE_2_TEXT)
-  }
-  else {
-    item.NODE_2_TEXT && carStore.setFilterTitles(item.NODE_2_TEXT)
+    item.NODE_2_STR_ID &&
+      item.NODE_2_TEXT &&
+      handleRedirect(item.NODE_2_STR_ID, item.NODE_2_TEXT);
+  } else {
+    item.NODE_2_TEXT && carStore.setFilterTitles(item.NODE_2_TEXT);
 
-    const categories = carStore.allCategories.filter((category: ICategory) => category.NODE_2_STR_ID === item.NODE_2_STR_ID)
+    const categories = carStore.allCategories.filter(
+      (category: ICategory) => category.NODE_2_STR_ID === item.NODE_2_STR_ID
+    );
 
-    carStore.setFilteredCategories(uniqBy(categories, 'NODE_3_TEXT'))
-    carStore.setFilterLevel(4)
-    router.push({ name: 'Categories', params: { id: props.carId, treeName: item.ROOT_NODE_TEXT, strid: item.NODE_2_STR_ID, strName: item.NODE_2_TEXT } })
+    carStore.setFilteredCategories(uniqBy(categories, "NODE_3_TEXT"));
+    carStore.setFilterLevel(4);
+    router.push({
+      name: "Categories",
+      params: {
+        id: props.carId,
+        treeName: item.ROOT_NODE_TEXT,
+        strid: item.NODE_2_STR_ID,
+        strName: item.NODE_2_TEXT,
+      },
+    });
   }
-}
+};
 
 const handleFourthLevlClick = (item: ICategory) => {
-  item.NODE_3_STR_ID && item.NODE_3_TEXT && handleRedirect(item.NODE_3_STR_ID, item.NODE_3_TEXT)
-}
+  item.NODE_3_STR_ID &&
+    item.NODE_3_TEXT &&
+    handleRedirect(item.NODE_3_STR_ID, item.NODE_3_TEXT);
+};
 
 const handlePreviousClick = () => {
   if (carStore.filterLevel > 1) {
-    carStore.filterLevel--
-    carStore.removeFilterTitle()
-    router.go(-1)
+    carStore.filterLevel--;
+    carStore.removeFilterTitle();
+    router.go(-1);
   }
-}
+};
 
 watch(selectedBrand, async () => {
-  const index = brandStore.carSuppliersProducts.findIndex(item => item.SUP_BRAND === selectedBrand.value)
+  const index = brandStore.carSuppliersProducts.findIndex(
+    (item) => item.SUP_BRAND === selectedBrand.value
+  );
 
-  brandStore.setSelectedBrandIndex(index)
-})
+  brandStore.setSelectedBrandIndex(index);
+});
 
 watchEffect(() => {
-  carCategoriesData.value = carStore.carCategories
-})
+  carCategoriesData.value = carStore.carCategories;
+});
 
 onMounted(() => {
-  carCategoriesData.value = carStore.carCategories
-})
+  carCategoriesData.value = carStore.carCategories;
+});
 
-watch(() => route.params, async () => {
-  if (route.name === 'Categories')
-    await getCarInfo({ selectedType: carStore.carType, car: props.carId })
-})
-
-watch(() => brandStore.brands, () => {
-  // eslint-disable-next-line curly
-  if (brandStore.brands.length > 0) {
-    selectedBrand.value = brandStore.brands[0]
+watch(
+  () => route.params,
+  async () => {
+    if (route.name === "Categories")
+      await getCarInfo({ selectedType: carStore.carType, car: props.carId });
   }
-})
+);
+
+watch(
+  () => brandStore.brands,
+  () => {
+    // eslint-disable-next-line curly
+    if (brandStore.brands.length > 0) {
+      selectedBrand.value = brandStore.brands[0];
+    }
+  }
+);
 </script>
 
 <template>
-  <div
-    v-loading.fullscreen.lock="loading"
-    class=""
-  >
+  <div v-loading.fullscreen.lock="loading" class="">
     <div class="w-full flex gap-4">
       <div class="w-1/4 space-y-4">
         <div class="bg-white rounded-md px-4 py-2">
@@ -213,10 +255,7 @@ watch(() => brandStore.brands, () => {
                 <div><VIcon icon="mdi-chevron-right" /></div>
               </div>
             </div>
-            <div
-              v-if="!loading && !carCategoriesData"
-              class="px-4"
-            >
+            <div v-if="!loading && !carCategoriesData" class="px-4">
               No Categories found
             </div>
           </div>
@@ -224,9 +263,36 @@ watch(() => brandStore.brands, () => {
       </div>
       <div class="w-3/4 space-y-4">
         <div class="sticky top-0 z-10 w-full space-y-3">
-          <CarOverview :car-id="props.carId" />
-          <div class="bg-white rounded-md w-full p-3">
-            Breadcrumb goes here
+          <CarOverview :carId="props.carId" />
+          <div class="rounded-md w-full">
+            <ElBreadcrumb separator=">>">
+              <div
+                v-if="route.params.groupName"
+                class="flex bg-white px-2 py-4"
+              >
+                <ElBreadcrumbItem
+                  v-for="item in routeItems"
+                  :key="item.name"
+                  :href="route.path"
+                  :to="route.path"
+                >
+                  {{ item.name }}
+                </ElBreadcrumbItem>
+                <div>{{ route.params.groupName }}</div>
+              </div>
+
+              <div v-if="route.params.treeName" class="flex bg-white px-2 py-4">
+                <ElBreadcrumbItem
+                  v-for="item in routeItems"
+                  :key="item.name"
+                  :href="route.path"
+                  :to="route.path"
+                >
+                  {{ item.name }}
+                </ElBreadcrumbItem>
+                <div>{{ route.params.treeName }}</div>
+              </div>
+            </ElBreadcrumb>
           </div>
         </div>
         <RouterView />
