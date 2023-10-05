@@ -19,7 +19,7 @@ export interface ICarSupplierProduct {
 export default function useCars() {
     const cars: Ref<any[]> = ref([])
     const carSuppliersProducts: Ref<ICarSupplierProduct[]> = ref([])
-    let carData: Ref<any> = ref(null)
+    const carData: Ref<any> = ref(null)
     const loading: Ref<boolean> = ref(false)
     const error: Ref<string> = ref('')
     const noDataFound: Ref<boolean> = ref(false)
@@ -48,15 +48,7 @@ export default function useCars() {
             loading.value = false
         }
     }
-    const convertDateRange = (startYear : string, endYear : string) : string => {
-        const [startYearPart1, startYearPart2] = startYear.split('-');
-        const [endYearPart1, endYearPart2] = endYear.split('-');
 
-        const formattedStartYear = `${startYearPart2}.${startYearPart1}`;
-        const formattedEndYear = `${endYearPart2}.${endYearPart1}`;
-
-        return `${formattedStartYear} - ${formattedEndYear}`;
-    }
     const getCarInfo = async (params : {
         car: string;
         selectedType: string
@@ -73,13 +65,8 @@ export default function useCars() {
 
             const responseData = await response.data
             if (responseData.data) {
-                carData.value = {
-                    ... responseData.data,
-                    PCS_CONSTRUCTION_YEAR: convertDateRange(responseData.data.PCS_CONSTRUCTION_INTERVAL_START, responseData.data.PCS_CONSTRUCTION_INTERVAL_END)
-                }
-                console.log(convertDateRange(responseData.data.PCS_CONSTRUCTION_INTERVAL_START, responseData.data.PCS_CONSTRUCTION_INTERVAL_END));
-
-                store.setCarInfo(carData.value)
+                carData.value = responseData.data
+                store.setCarInfo(responseData.data)
                 store.setCategories(responseData.tree)
                 noDataFound.value = false
             } else {

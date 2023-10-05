@@ -54,9 +54,11 @@ watch(searchData, async () => {
 });
 
 const handleRedirect = () => {
+  console.log(searchData.value);
+
   router.push({
     name: "Categories",
-    params: { id: searchData.value.carId, targetType: carStore.carType },
+    params: { id: searchData.value.data.carId, targetType: carStore.carType },
   });
 };
 </script>
@@ -94,7 +96,7 @@ const handleRedirect = () => {
         </div>
       </div>
 
-      <div v-if="plateType === 'TU'" class="w-full md:w-1/6">
+      <div class="w-full md:w-1/6">
         <div class="flex flex-wrap">
           <ElInput v-model="plate" placeholder="Number : 2999" class="w-full" />
         </div>

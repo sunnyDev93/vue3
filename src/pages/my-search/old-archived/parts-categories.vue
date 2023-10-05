@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import { defineProps } from 'vue'
-import SearchCategories from '../../../views/home/SearchCategories.vue'
-import HomeHeader from '@/components/Custom/Headers/HomeHeader.vue'
+import { defineProps } from "vue";
+import SearchCategories from "../../../views/home/SearchCategories.vue";
+import HomeHeader from "@/components/Custom/Headers/HomeHeader.vue";
 
-const props = defineProps(['id'])
+const props = defineProps(["id"]);
 
-const searchCategoriesVisible: Ref<boolean> = ref(false)
+const searchCategoriesVisible: Ref<boolean> = ref(false);
 
 const hanldeShowSeacrhCategories = (): void => {
-  searchCategoriesVisible.value = !searchCategoriesVisible.value
-}
+  searchCategoriesVisible.value = !searchCategoriesVisible.value;
+};
 
 const handleSaerchCategoryInputFocus = (): void => {
-  searchCategoriesVisible.value = false
-}
+  searchCategoriesVisible.value = false;
+};
 </script>
 
 <template>
@@ -34,9 +34,9 @@ const handleSaerchCategoryInputFocus = (): void => {
         @catalogue-click="handleSaerchCategoryInputFocus"
       />
     </div>
-    <hr>
+    <hr />
     <div class="w-[100%] m-auto">
-      <SearchCategories :car-id="props.id" />
+      <SearchCategories :carId="props.id" />
     </div>
   </div>
 </template>

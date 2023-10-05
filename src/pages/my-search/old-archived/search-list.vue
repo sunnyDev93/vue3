@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import type { Ref } from 'vue'
-import { ref } from 'vue'
-import SearchProductList from '@/components/Custom/Results/SearchProductList.vue'
-import HomeHeader from '@/components/Custom/Headers/HomeHeader.vue'
+import type { Ref } from "vue";
+import { ref } from "vue";
+import SearchProductList from "@/components/Custom/Results/SearchProductList.vue";
+import HomeHeader from "@/components/Custom/Headers/HomeHeader.vue";
 
-const props = defineProps(['categoryId', 'groupName', 'carId'])
+const props = defineProps(["categoryId", "groupName", "carId"]);
 
-const searchCategoriesVisible: Ref<boolean> = ref(false)
+const searchCategoriesVisible: Ref<boolean> = ref(false);
 
 const hanldeShowSeacrhCategories = (): void => {
-  searchCategoriesVisible.value = !searchCategoriesVisible.value
-}
+  searchCategoriesVisible.value = !searchCategoriesVisible.value;
+};
 
 const handleSaerchCategoryInputFocus = (): void => {
-  searchCategoriesVisible.value = false
-}
+  searchCategoriesVisible.value = false;
+};
 </script>
 
 <template>
@@ -35,7 +35,11 @@ const handleSaerchCategoryInputFocus = (): void => {
         @catalogue-click="handleSaerchCategoryInputFocus"
       />
     </div>
-    <hr>
-    <SearchProductList :search-tree-id="props.categoryId" :group-name="props.groupName" :car-id="props.carId"/>
+    <hr />
+    <SearchProductList
+      :search-tree-id="props.categoryId"
+      :group-name="props.groupName"
+      :carId="props.carId"
+    />
   </div>
 </template>

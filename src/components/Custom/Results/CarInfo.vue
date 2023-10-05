@@ -7,8 +7,40 @@ import useCarStore from "@/store/car";
 const carStore = useCarStore();
 
 const newCarData = computed(() => {
-  delete carStore.cartInfo["PCS_CONSTRUCTION_INTERVAL_START"];
-  delete carStore.cartInfo["PCS_CONSTRUCTION_INTERVAL_END"];
+  if (
+    carStore.cartInfo["PCS_CONSTRUCTION_INTERVAL_START"] &&
+    carStore.cartInfo["PCS_CONSTRUCTION_INTERVAL_END"]
+  ) {
+    carStore.cartInfo["PCS_CONSTRUCTION_YEAR"] =
+      carStore.cartInfo["PCS_CONSTRUCTION_INTERVAL_START"].split("-")[1] +
+      "." +
+      carStore.cartInfo["PCS_CONSTRUCTION_INTERVAL_START"].split("-")[0] +
+      " - " +
+      carStore.cartInfo["PCS_CONSTRUCTION_INTERVAL_END"].split("-")[1] +
+      "." +
+      carStore.cartInfo["PCS_CONSTRUCTION_INTERVAL_END"].split("-")[0];
+
+    delete carStore.cartInfo["PCS_CONSTRUCTION_INTERVAL_START"];
+    delete carStore.cartInfo["PCS_CONSTRUCTION_INTERVAL_END"];
+  }
+  if (
+    carStore.cartInfo["PCS_CONSTRUCTION_INTERVAL_START"] &&
+    !carStore.cartInfo["PCS_CONSTRUCTION_INTERVAL_END"]
+  ) {
+    carStore.cartInfo["PCS_CONSTRUCTION_INTERVAL_START"] =
+      carStore.cartInfo["PCS_CONSTRUCTION_INTERVAL_START"].split("-")[1] +
+      "." +
+      carStore.cartInfo["PCS_CONSTRUCTION_INTERVAL_START"].split("-")[0];
+  }
+  if (
+    !carStore.cartInfo["PCS_CONSTRUCTION_INTERVAL_START"] &&
+    carStore.cartInfo["PCS_CONSTRUCTION_INTERVAL_END"]
+  ) {
+    carStore.cartInfo["PCS_CONSTRUCTION_INTERVAL_END"] =
+      carStore.cartInfo["PCS_CONSTRUCTION_INTERVAL_END"].split("-")[1] +
+      "." +
+      carStore.cartInfo["PCS_CONSTRUCTION_INTERVAL_END"].split("-")[0];
+  }
   return pickBy(carStore.cartInfo, (value: any) => value !== null);
 });
 </script>
